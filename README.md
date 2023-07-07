@@ -39,9 +39,7 @@ two servo motors, a PWM module, and 3D-printed parts.
 calibration, the software, and such will follow.
 - Additionally, there is a short video file in "assets/videos" which shows a scrambled Pocket cube being solved.
 
-<img src="./assets/images/PocketCube.jpg" height="150">
-<img src="./assets/images/PocketCube_Rotate.jpg" height="150">
-<img src="./assets/images/PocketCube_Turn.jpg" height="150">
+<img src="./assets/images/PocketCube.jpg" height="150"><img src="./assets/images/PocketCube_Rotate.jpg" height="150"><img src="./assets/images/PocketCube_Turn.jpg" height="150">
 
 ## Contributors
 This project is not a one-man-show. My deepest thanks go to my magnificent students at HAW Hamburg,
