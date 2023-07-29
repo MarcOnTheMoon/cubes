@@ -8,11 +8,23 @@ Join us on this fascinating endeavor.
 This is what we did so far:
 1. _Rubik's cube:_ A team of five students has built a high-performance device for Rubik's cube based on lots 
 of fancy hardware and a provided algorithm. The movements to solve a scrambled cube take well below 1 s.
-2. _Machine learning:_ A student has implemented published approaches, analyzed modifications, and clearly
-improved the performance. Due to required resources, the experiments focused on the Pocket
-cube, however, the approaches should be transferable to Rubik's cube as well.
-3. _Pocket cube:_ In the context of the work on machine learning methods, I have developed a simple low-cost
-device to mechanically solve scrambled Pocket cubes.
+2. _Machine learning:_ Finn Lanz has implemented published approaches, analyzed modifications, and improved the performance in scope of his Master thesis. Due to required resources, the experiments focused on the Pocket cube.
+3. _Pocket cube:_ I have developed a low-cost device to mechanically solve scrambled Pocket cubes. (Finn and I wanted to have a cool hardware demonstrator.)
+
+### Deep learning and Pocket cube solver
+So far, the following is available in the folders _docs_ and _pocket_cube_solver_:
+- Master thesis on machine learning (A* and Monte Carlo Tree Search, combined with deep learning) in German language.
+- Arduino source code and easy to use Python interface to control the Pocket cube solver.
+
+Other data such as a detailed documentation describing assembly, calibration, and the software of the Pocket cube solver, software for machine learning, and results will follow after a review.
+
+- The images below give you an impression of the low-cost hardware, consisting mainly of an Arduino board,
+two servo motors, a PWM module, and 3D-printed parts.
+- In case you want to rebuild the device, you can download the 3D print files on Thingiverse
+(https://www.thingiverse.com/thing:5822433).
+- Additionally, there is a short video file in "assets/videos" which shows a scrambled Pocket cube being solved.
+
+<img src="./assets/images/PocketCube.jpg" height="125"> <img src="./assets/images/PocketCube_Rotate.jpg" height="125"> <img src="./assets/images/PocketCube_Turn.jpg" height="125">
 
 ### Rubik's cube solver
 We will make details of the machine for Rubik's cube available in a dedicated sub folder in due time.
@@ -25,21 +37,6 @@ operated by a Laptop connected to the control cabinet.
 and solved (much faster). 
 
 <img src="./assets/images/CubeSolver.jpg" width="500">
-
-### Deep learning and Pocket cube solver
-As of today (July 7, 2023), the Master thesis on machine learning (A* and Monte Carlo Tree Search,
-combined with deep learning) will be finalized within the next days. We will make the thesis available
-as soon as possible. Other data such as software and results will follow after a review.
-
-- The images below give you an impression of the low-cost hardware, consisting mainly of an Arduino board,
-two servo motors, a PWM module, and 3D-printed parts.
-- In case you want to rebuild the device, you can download the 3D print files on Thingiverse
-(https://www.thingiverse.com/thing:5822433).
-- Source codes for the Arduino and a comfortable Python API as well as a document describing assembly,
-calibration, the software, and such will follow.
-- Additionally, there is a short video file in "assets/videos" which shows a scrambled Pocket cube being solved.
-
-<img src="./assets/images/PocketCube.jpg" height="150"><img src="./assets/images/PocketCube_Rotate.jpg" height="150"><img src="./assets/images/PocketCube_Turn.jpg" height="150">
 
 ## Contributors
 This project is not a one-man-show. My deepest thanks go to my magnificent students at HAW Hamburg,
