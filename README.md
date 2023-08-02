@@ -12,24 +12,27 @@ of fancy hardware and a provided algorithm. The movements to solve a scrambled c
 3. _Pocket cube device:_ I have developed a low-cost device to mechanically solve scrambled Pocket cubes. (Finn and I wanted to have a cool hardware demonstrator for his Master thesis.)
 
 ### Pocket cube device
-The _Pocket cube solver_ shown in the images below is, on purpose, based on low-cost hardware, consisting mainly of an Arduino board, two servo motors, a PWM module, and 3D-printed parts. In case you want to rebuild the device, please note the detailed documentation in the folder "docs" describing assembly, calibration, and the software. All source files (Arduino, Python) are located in "src/pocket_cube_device", and the 3D print files are available on Thingiverse (https://www.thingiverse.com/thing:5822433). Additionally, there is a short video file in "assets/videos".
+The _Pocket cube solver_ shown in the images below is, on purpose, based on low-cost hardware, consisting mainly of an Arduino board, two servo motors, a PWM module, and 3D-printed parts. In case you want to rebuild the device, please note the detailed [documentation](docs/) in the folder "docs" describing assembly, calibration, and the software. All [source files](src/pocket_cube_device) (Arduino, Python) are located in "src/pocket_cube_device", and the [3D print files on Thingiverse](https://www.thingiverse.com/thing:5822433). Additionally, there is a short [video file](assets/videos) in "assets/videos".
 
 <img src="./assets/images/PocketCube.jpg" height="125"> <img src="./assets/images/PocketCube_Rotate.jpg" height="125"> <img src="./assets/images/PocketCube_Turn.jpg" height="125">
 
 ### Rubik's cube device
-The _Rubik's cube solver_ shown in the image below consists of a control cabinet with motor drivers, microcontroller, and such (left) and the hardware containing the cube, motors, cameras, and such (right). The device is
-operated by a Laptop connected to the control cabinet. Additionally, there is a short video file in "assets/videos" which shows a cube being scrambled twice (slowly) and solved (much faster). We intend to provide technical information and source codes after a review - please be patient.
+The _Rubik's cube solver_ shown in the image below consists of a control cabinet with motor drivers, microcontroller, and such (left) and the hardware containing the cube, motors, cameras, and such (right). The device is operated by a Laptop connected to the control cabinet. The [project report](docs/) (German) providing technical information is in "docs". Additionally, there is a short [video file](assets/videos) in "assets/videos" which shows a cube being scrambled twice (slowly) and solved (much faster). We intend to provide more information and source codes after a review - please be patient.
 
 <img src="./assets/images/CubeSolver.jpg" width="500">
 
 ### Deep learning
-In scope of his Master thesis, Finn has trained several models to solve scrambles Pocket cubes. Furthermore, he has developed a program to scan the colors of Pocket cubes placed in the Pocket cube device and physically unscramble them. The Master thesis is available in the folder "docs" (in German language). Software and models will follow after a review - please be patient.
+In scope of his Master thesis, Finn has trained several models to solve scrambles Pocket cubes. Furthermore, he has developed a program to scan the colors of Pocket cubes placed in the Pocket cube device and physically unscramble them. The [Master thesis](docs/) is available in the folder "docs" (in German language). Software and models will follow after a review - please be patient.
 
-## Still to come (open)
-- Reinforcement learning (source code, trained models)
-- Pocket cube application including trained models
-- Technical documentation and source codes of Rubik's cube device
-- Refactoring of Rubik's cube device
+## Upload status (uploaded or still to come)
+- [X] Master thesis on reinforcement learning and Pocket cube solver
+- [X] Pocket cube device (documentation, 3D print files, source codes)
+- [x] Rubik's cube solver (documentation)
+- [ ] Reinforcement learning (source codes, trained models)
+- [ ] Pocket cube application (including trained models)
+- [ ] Rubik's cube solver (source codes)
+- [ ] Refactoring of Rubik's cube device
+- [ ] Better sample videos
 
 ## Contributors
 My deepest thanks go to following  magnificent students of our  [Department at HAW Hamburg](https://www.haw-hamburg.de/hochschule/technik-und-informatik/departments/informations-und-elektrotechnik/studium/studiengaenge/), who raised my interest for this topic and contributed by their brilliant work done with remarkable passion:
