@@ -7,7 +7,7 @@ action a applied to state s.
 @authors: Marc Hensel
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.08
+@version: 2023.08.09
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 # Add Pocket cube env to path
@@ -32,6 +32,7 @@ class Policy():
         Returns
         -------
         None.
+        
         """
         self.Q = defaultdict(lambda: np.zeros(number_actions))
         self.file_name = 'PCube_SampleQuality.npy'
@@ -51,6 +52,7 @@ class Policy():
         -------
         int
             index, being the joined tuples state.positions and state.orientations
+            
         """
         return state.positions + state.orientations
 
@@ -69,6 +71,7 @@ class Policy():
         -------
         int
             index, being the enumeration value within class Action
+            
         """
         return action.value
 
@@ -87,6 +90,7 @@ class Policy():
         -------
         int
             Maximum rewards (including future rewards) known for state s.
+            
         """
         s = self.to_index_s(state)
         return self.Q[s].max()
@@ -106,6 +110,7 @@ class Policy():
         -------
         Action
             Action applied to state s with highest future rewards.
+            
         """
         s = self.to_index_s(state)
         return Action(self.Q[s].argmax())
@@ -128,6 +133,7 @@ class Policy():
         Returns
         -------
         None.
+        
         """
         assert isinstance(state, State)
         assert isinstance(action, Action)
@@ -145,6 +151,7 @@ class Policy():
         Returns
         -------
         None.
+        
         """
         np.save(self.file_name, np.array(dict(self.Q)))
 
@@ -158,6 +165,7 @@ class Policy():
         -------
         bool
             True if the file exists, else False.
+            
         """
         if os.path.exists(self.file_name):
             q = np.load(self.file_name, allow_pickle = True)

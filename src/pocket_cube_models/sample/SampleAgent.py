@@ -1,16 +1,14 @@
 """
 Basic example how to use the Pocket cube environment for OpenAI gym.
 
-First, sets the correct actions to solve cubes scrambles by 1 or 2 moves
-deterministically. As second step, extends the policy to 3 (or more) scrambles
-by scrambling a solved cube randomly 2 (or more) times and adding all next
-scramble steps. Finally, the results are visualized by trying to solve randomly
-scrambled cubes.
+Learns how to solve randomly scrambled cubes starting with cubes being
+scrambled by 1 move, then 2 moves, 3 moves, and so on. Finally, the results
+are visualized by trying to solve randomly scrambled cubes.
 
 @authors: Marc Hensel
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.08
+@version: 2023.08.09
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -41,46 +39,16 @@ class SampleAgent():
         Returns
         -------
         None.
+        
         """
         # Init gym environment
         assert isinstance(render_fps, float)
         self.env = PocketCubeEnv(render_fps=render_fps)
         
-        # Init policy (including up to 2 scrambles)
+        # Init policy
         self.policy = Policy(self.env.action_space.n)
-        self._init_policy()
 
     # ========== Improve policy ===============================================
-
-    def _init_policy(self):
-        """
-        Set policy to solve cubes scrambled 1x or 2x.
-
-        Returns
-        -------
-        None.
-        """
-        # Solved cubes scrambled 1x
-        for action in list(Action):
-            # Scramble solved cube
-            self.env.reset()
-            state, _, _, _, = self.env.step(action)
-            
-            # Solve by inverse action and add to policy
-            inverse_action = action.inverse_action()
-            _, reward, _, _, = self.env.step(inverse_action)
-            self.policy.add(state, inverse_action, reward)
-
-        # Solved cubes scrambled 2x
-        for scramble_action in list(Action):
-            # Scramble 1x
-            self.env.reset()
-            state, _, _, _, = self.env.step(scramble_action)
-            
-            # Add all states scrambled another time
-            self._add_scrambles(state)
-
-    # -------------------------------------------------------------------------
 
     def _add_scrambles(self, state):
         """
@@ -95,16 +63,16 @@ class SampleAgent():
         Returns
         -------
         None.
+        
         """
         assert isinstance(state, State)
         
-        actions = list(Action)
-        
-        # Proceed only if initial state knows action to solved cube
-        if self.policy.max_rewards(state) <= 0:
+        # Skip if there is no known way to the solved cube from the state
+        if (self.policy.max_rewards(state) <= 0) and (state.is_cube_solved() is False):
             return
-
+        
         # For each scramble add best action to policy
+        actions = list(Action)
         for scramble_action in actions:
             # Scramble initial state
             self.env.observation_space = state
@@ -116,12 +84,13 @@ class SampleAgent():
                 # Apply action to scrambled state
                 self.env.observation_space = scrambled_state
                 new_state, reward, _, _, = self.env.step(action)
-                future_rewards[action.value] = self.policy.max_rewards(new_state)
+                future_rewards[action.value] = reward + self.policy.max_rewards(new_state)
 
             # Add action with highest future reward to Q tables
             max_reward = future_rewards.max()
-            max_action = Action(future_rewards.argmax())
-            self.policy.add(scrambled_state, max_action, reward + max_reward)
+            if max_reward > 0:
+                max_action = Action(future_rewards.argmax())
+                self.policy.add(scrambled_state, max_action, reward + max_reward)
 
     # -------------------------------------------------------------------------
 
@@ -144,14 +113,11 @@ class SampleAgent():
         Returns
         -------
         None.
+        
         """
-        # 1 to 2 scrambles already added in _init_policy()
-        if number_scrambles < 3:
-            return
-
-        # Add further states randomly        
         print(f'Training cube with {number_scrambles:_} scrambles:', flush=True)
         start_time_ns = time.time_ns()
+        
         for current_episode in range(1, number_episodes + 1):
             # Scramble cube
             self.env.reset()
@@ -183,6 +149,7 @@ class SampleAgent():
         Returns
         -------
         None.
+        
         """
         # Create the scrambled cube
         self.env.reset()
@@ -208,7 +175,6 @@ class SampleAgent():
 # -----------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # Init agend and policy for up to 2 scrambles
     agent = SampleAgent()
 
     # Load policy from file (to further improve it)
@@ -218,16 +184,19 @@ if __name__ == '__main__':
         print('No policy file found.')
     
     # Improve policy for more scrambles and save it to file
-    agent.train_policy(number_scrambles = 3, number_episodes = 10_000)
-    agent.train_policy(number_scrambles = 4, number_episodes = 15_000)
+    agent.train_policy(number_scrambles = 1, number_episodes = 5_000)
+    agent.train_policy(number_scrambles = 2, number_episodes = 15_000)
+    agent.train_policy(number_scrambles = 3, number_episodes = 25_000)
     print('Saving policy to file ...')
     agent.policy.save_to_file()
     
     # Demonstrate policy with randomly scrambled cubes
     for _ in range(3):
-        agent.apply_policy(number_scrambles = 3)
+        agent.apply_policy(number_scrambles = 1)
     for _ in range(3):
-        agent.apply_policy(number_scrambles = 4)
+        agent.apply_policy(number_scrambles = 2)
+    for _ in range(3):
+        agent.apply_policy(number_scrambles = 3)
     
     # Cleanup
     agent.env.close()
