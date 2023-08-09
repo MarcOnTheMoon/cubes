@@ -7,7 +7,7 @@ https://www.gymlibrary.dev/content/environment_creation/
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.07
+@version: 2023.08.09
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -65,14 +65,45 @@ class PocketCubeEnv(gym.Env):
         self.observation_space, _ = self.reset()
 
     # ========== Override gym.Env: Reset environment ==========================
-        
-    def reset(self):
+    
+    def _random_orientation(self):
+        # Actions to bring a color to the face 'up'
+        face_up = {
+            'white': [],
+            'blue': [Action.B, Action.f],
+            'green': [Action.b, Action.F],
+            'red': [Action.R, Action.l],
+            'orange': [Action.r, Action.L],
+            'yellow': [Action.R, Action.R, Action.l, Action.l] }
+
+        # Actions to rotate the cube as a whole horizontally
+        horizontal_rotations = {
+            '0': [],
+            '90': [Action.D, Action.u],
+            '180': [Action.D, Action.D, Action.u, Action.u],
+            '270': [Action.d, Action.U] }
+
+        # Rotate the cube as a whole randomly
+        up_actions = random.choice(list(face_up.values()))
+        rotate_actions = random.choice(list(horizontal_rotations.values()))
+        for action in (up_actions + rotate_actions):
+            self.step(action)
+    
+        # Do not count moves
+        self.last_move = ''
+        self.number_moves = 0
+    
+    # -------------------------------------------------------------------------
+
+    def reset(self, is_random_orientation=True):
         """
         Sets the environment to its initial state.
 
         Parameters
         ----------
-        None
+        is_random_orientation : bool
+            Resets cube to standard orientation (white up, red front) if False,
+            else with the cube randomly rotated.
 
         Returns
         -------
@@ -81,10 +112,13 @@ class PocketCubeEnv(gym.Env):
         info:
             Empty, but required by Gym API
         """
-        self.observation_space = State()
         self.last_move = ''
         self.number_moves = 0
         self.number_scrambles = 0
+
+        self.observation_space = State()
+        if is_random_orientation:
+            self._random_orientation()
         
         return self.observation_space, {}
 
@@ -189,10 +223,9 @@ class PocketCubeEnv(gym.Env):
 
         # Apply random actions (excluding inverse sequences like Rr or uU)
         for _ in range(number_moves):
-            # Apply radom action (not counting moves)
+            # Apply radom action
             action = random.choice(valid_actions)
             self.step(action)
-            self.number_moves -= 1
 
             # Create list without inverse action for next run            
             valid_actions = list(Action)
@@ -200,6 +233,10 @@ class PocketCubeEnv(gym.Env):
             
         # Store number of scrambles (displayed in rendering)
         self.number_scrambles = number_moves
+        
+        # Don't count moves
+        self.number_moves = 0
+        self.last_move = ''
             
         return self.observation_space
 

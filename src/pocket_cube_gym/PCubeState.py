@@ -19,8 +19,9 @@ class State:
     List self.positions stores the location of each stone.
     List self.orientation stores the angle of each stone at its location.
     
-    A solved cube hat positions (0, 1, 2, 3, 4, 5, 6, 7)
-    and orientations (0, 0, 0, 0, 0, 0, 0, 0).
+    A solved cube in 'standard orientation' has positions (0, 1, 2, 3, 4, 5, 6, 7)
+    and orientations (0, 0, 0, 0, 0, 0, 0, 0). 'Standard orientation' corresponds
+    to face 'up' being white and face 'front' being red.
     """
 
     # ========== Constructor ==================================================
