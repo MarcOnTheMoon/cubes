@@ -22,13 +22,16 @@ The _Rubik's cube solver_ shown in the image below consists of a control cabinet
 <img src="./assets/images/CubeSolver.jpg" width="500">
 
 ### Deep learning
-In scope of his Master thesis, Finn has trained several models to solve scrambles Pocket cubes. Furthermore, he has developed a program to scan the colors of Pocket cubes placed in the Pocket cube device and physically unscramble them. The [Master thesis](docs/) is available in the folder "docs" (in German language). Software and models will follow after a review - please be patient.
+In scope of his Master thesis, Finn has trained several models to solve scrambled Pocket cubes. Furthermore, he has developed a program to scan the colors of Pocket cubes placed in the Pocket cube device and physically unscramble them. The [Master thesis](docs/) is available in the folder "docs" (in German language). The [OpenAI gym environment](src/pocket_cube_gym) and a simple [sample agent and policy](src/pocket_cube_models/sample) to demonstrate its use are in "src". The application software and training of more sophisticated models will follow - please be patient.
+
+<img src="./assets/images/PocketCubeGym.png" width="400">
 
 ## Upload status (uploaded or still to come)
 - [X] Master thesis on reinforcement learning and Pocket cube solver
 - [X] Pocket cube device (documentation, 3D print files, source codes)
 - [x] Rubik's cube solver (documentation)
-- [ ] Reinforcement learning (source codes, trained models)
+- [X] Reinforcement learning (gym environment, sample)
+- [ ] Reinforcement learning (source codes to train models, trained models)
 - [ ] Pocket cube application (including trained models)
 - [ ] Rubik's cube solver (source codes)
 - [ ] Refactoring of Rubik's cube device
