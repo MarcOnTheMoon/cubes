@@ -49,6 +49,37 @@ class State:
 
     # ========== Getter =======================================================
 
+    # Solved states (key: orientation, value: valid positions for the orientation)
+    _solved_states = {
+        (0, 0, 0, 0, 0, 0, 0, 0): (
+            (0, 1, 2, 3, 4, 5, 6, 7),       # White 0
+            (1, 2, 3, 0, 5, 6, 7, 4),       # White 270
+            (2, 3, 0, 1, 6, 7, 4, 5),       # White 180
+            (3, 0, 1, 2, 7, 4, 5, 6),       # White 90
+            (4, 7, 6, 5, 0, 3, 2, 1),       # Yellow 90
+            (5, 4, 7, 6, 1, 0, 3, 2),       # Yellow 180
+            (6, 5, 4, 7, 2, 1, 0, 3),       # Yellow 270
+            (7, 6, 5, 4, 3, 2, 1, 0)),      # Yellow 0
+        (1, 2, 1, 2, 2, 1, 2, 1): (
+            (0, 3, 7, 4, 1, 2, 6, 5),       # Green 270
+            (1, 0, 4, 5, 2, 3, 7, 6),       # Red 180
+            (2, 1, 5, 6, 3, 0, 4, 7),       # Blue 90
+            (3, 2, 6, 7, 0, 1, 5, 4),       # Orange 0
+            (4, 5, 1, 0, 7, 6, 2, 3),       # Red 0
+            (5, 6, 2, 1, 4, 7, 3, 0),       # Blue 270
+            (6, 7, 3, 2, 5, 4, 0, 1),       # Orange 180
+            (7, 4, 0, 3, 6, 5, 1, 2)),      # Green 90
+        (2, 1, 2, 1, 1, 2, 1, 2): (
+            (0, 4, 5, 1, 3, 7, 6, 2),       # Red 90
+            (1, 5, 6, 2, 0, 4, 7, 3),       # Blue 0
+            (2, 6, 7, 3, 1, 5, 4, 0),       # Orange 270
+            (3, 7, 4, 0, 2, 6, 5, 1),       # Green 180
+            (4, 0, 3, 7, 5, 1, 2, 6),       # Green 0
+            (5, 1, 0, 4, 6, 2, 3, 7),       # Red 270
+            (6, 2, 1, 5, 7, 3, 0, 4),       # Blue 180
+            (7, 3, 2, 6, 4, 0, 1, 5))       # Orange 90
+        }
+
     def is_cube_solved(self):
         """
         Check whether the state represents a solved cube (i.e., faces not scrambled).
@@ -59,12 +90,15 @@ class State:
             True if state represents solved cube, else False.
             
         """
-        planes = self.get_plane_representation()
+        # planes = self.get_plane_representation()
         
-        for plane in planes:
-            if (plane[0] != plane[1]) or (plane[0] != plane[2]) or (plane[0] != plane[3]):
-                return False
-        return True
+        # for plane in planes:
+        #     if (plane[0] != plane[1]) or (plane[0] != plane[2]) or (plane[0] != plane[3]):
+        #         return False
+        # return True
+
+        is_orientation = self.orientations in self._solved_states
+        return is_orientation and (self.positions in self._solved_states[self.orientations])
     
     # ========== Apply action =================================================
 
