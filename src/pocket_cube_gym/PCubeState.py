@@ -42,6 +42,7 @@ class State:
         Returns
         -------
         None.
+        
         """
         self.positions = positions
         self.orientations = orientations
@@ -56,6 +57,7 @@ class State:
         -------
         bool
             True if state represents solved cube, else False.
+            
         """
         planes = self.get_plane_representation()
         
@@ -94,6 +96,7 @@ class State:
         -------
         state  : State
             Resulting state when the action is applied to the current state.
+            
         """
         assert isinstance(action, Action)
         
@@ -123,6 +126,7 @@ class State:
             Positions with correct order after the action has been applied
         dst_orientations : list(int)
             Orientations with correct order (possibly wrong angle) after the action has been applied
+            
         """
         dst_positions = list(self.positions)
         dst_orientations = list(self.orientations)
@@ -150,6 +154,7 @@ class State:
         -------
         list(int) :
             Orientations with correct angle after the action has been applied
+            
         """
         if action in [Action.R, Action.r]:
             corners = ((1, 2), (2, 1), (5, 1), (6, 2))
@@ -235,6 +240,7 @@ class State:
             Plane representation with colors denoted by chard, e.g. solved cube:
             [['W', 'W', 'W', 'W'], ['G', 'G', 'G', 'G'], ['O', 'O', 'O', 'O'],
              ['R', 'R', 'R', 'R'], ['B', 'B', 'B', 'B'], ['Y', 'Y', 'Y', 'Y']]
+            
         """
         plane_faces = [
             [None, None, None, None],       # Up
@@ -272,6 +278,7 @@ class State:
         -------
         tuple :
             Color tuple of the cubie with reordered colors.
+            
         """
         if orientation == 0:
             return colors
@@ -303,6 +310,7 @@ class State:
         -------
         numpy.ndarray
             Encoded state
+            
         """
         assert (dst is None) or (isinstance(dst, np.ndarray) and (dst.shape == (8, 24)))
 

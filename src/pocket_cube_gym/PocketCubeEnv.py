@@ -43,6 +43,7 @@ class PocketCubeEnv(gym.Env):
         Returns
         -------
         None.
+        
         """
         # Init action space (6 faces rotated clockwise or counter-clockwise)
         self.action_space = spaces.Discrete(12)
@@ -67,6 +68,16 @@ class PocketCubeEnv(gym.Env):
     # ========== Override gym.Env: Reset environment ==========================
     
     def _random_orientation(self):
+        """
+        Rotates cube as a whole randomly. This makes sure that the initial
+        solved cube does not always have the color white at its face 'up'
+        and red at its face 'front'.
+
+        Returns
+        -------
+        None.
+        
+        """
         # Actions to bring a color to the face 'up'
         face_up = {
             'white': [],
@@ -111,6 +122,7 @@ class PocketCubeEnv(gym.Env):
             Initial state (observation space) of the cube
         info:
             Empty, but required by Gym API
+            
         """
         self.last_move = ''
         self.number_moves = 0
@@ -143,6 +155,7 @@ class PocketCubeEnv(gym.Env):
             True if the cube is in the solved state, else False
         info:
             Empty, but required by Gym API
+            
         """
         assert isinstance(action, Action)
         
@@ -176,6 +189,7 @@ class PocketCubeEnv(gym.Env):
         Returns
         -------
         None.
+        
         """
         # Set state
         if state is None:
@@ -198,6 +212,7 @@ class PocketCubeEnv(gym.Env):
         Returns
         -------
         None.
+        
         """
         if self.render_window is not None:
             self.render_window.close()
@@ -217,6 +232,7 @@ class PocketCubeEnv(gym.Env):
         -------
         State
             State after scrambling
+            
         """
         # Create list of all actions
         valid_actions = list(Action)
@@ -260,6 +276,7 @@ class PocketCubeEnv(gym.Env):
             List of states that can be reached from the original state.
         is_solved_states : list(bool)
             Corresponding flag, if a state in the list is the solved cube.
+            
         """
         assert (state is None) or isinstance(state, State)
 

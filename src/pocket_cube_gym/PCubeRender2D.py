@@ -9,7 +9,7 @@ by the command 'pip install pygame'.
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.07
+@version: 2023.08.09
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 import os
@@ -38,6 +38,7 @@ class Render2D:
         Returns
         -------
         None.
+        
         """
         assert isinstance(fps, float) and (fps > 0.0)
         
@@ -75,6 +76,7 @@ class Render2D:
         Returns
         -------
         None.
+        
         """
         HWND_TOPMOST = -1
         SWP_NOSIZE = 0x0001
@@ -100,6 +102,7 @@ class Render2D:
         Returns
         -------
         None.
+        
         """
         if is_show is True:
             self.screen = pygame.display.set_mode((self._width, self._height))
@@ -119,6 +122,7 @@ class Render2D:
         Returns
         -------
         None.
+        
         """
         pygame.display.quit()
         pygame.quit()
@@ -151,6 +155,7 @@ class Render2D:
         -------
         tuple(int)
             RGB values corresponding to the color.
+            
         """
         match color_char:
             case 'W': color = Render2D._colors['white']
@@ -179,6 +184,7 @@ class Render2D:
         Returns
         -------
         None.
+        
         """
         assert isinstance(state, State)
 
@@ -232,6 +238,7 @@ class Render2D:
         Returns
         -------
         None.
+        
         """
         text_color = Render2D._colors['black']
         image_last_move = self.font.render(f'Last move : {self._env.last_move}', True, text_color)
@@ -256,6 +263,7 @@ class Render2D:
         Returns
         -------
         None.
+        
         """
         # Get plane representation and reorder
         # TODO Change get_plane_representation() to return correct order?
