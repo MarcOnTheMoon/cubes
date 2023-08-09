@@ -79,7 +79,7 @@ class SampleAgent():
             scrambled_state, _, _, _, = self.env.step(scramble_action)
             
             # Determine future rewards of all actions
-            future_rewards = np.zeros(len(Action))
+            future_rewards = np.zeros(len(Action), dtype=int)
             for action in actions:
                 # Apply action to scrambled state
                 self.env.observation_space = scrambled_state
@@ -175,6 +175,7 @@ class SampleAgent():
 # -----------------------------------------------------------------------------
 
 if __name__ == '__main__':
+    max_scrambles = 4
     agent = SampleAgent()
 
     # Load policy from file (to further improve it)
@@ -184,19 +185,15 @@ if __name__ == '__main__':
         print('No policy file found.')
     
     # Improve policy for more scrambles and save it to file
-    agent.train_policy(number_scrambles = 1, number_episodes = 5_000)
-    agent.train_policy(number_scrambles = 2, number_episodes = 15_000)
-    agent.train_policy(number_scrambles = 3, number_episodes = 25_000)
+    for number_scrambles in range(1, max_scrambles + 1):
+        agent.train_policy(number_scrambles, number_episodes = number_scrambles * 10_000)
     print('Saving policy to file ...')
     agent.policy.save_to_file()
     
     # Demonstrate policy with randomly scrambled cubes
-    for _ in range(3):
-        agent.apply_policy(number_scrambles = 1)
-    for _ in range(3):
-        agent.apply_policy(number_scrambles = 2)
-    for _ in range(3):
-        agent.apply_policy(number_scrambles = 3)
+    for number_scrambles in range(1, max_scrambles + 1):
+        for _ in range(3):
+            agent.apply_policy(number_scrambles)
     
     # Cleanup
     agent.env.close()

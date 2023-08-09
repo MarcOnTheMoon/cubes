@@ -34,7 +34,7 @@ class Policy():
         None.
         
         """
-        self.Q = defaultdict(lambda: np.zeros(number_actions))
+        self.Q = defaultdict(lambda: np.zeros(number_actions, dtype=int))
         self.file_name = 'PCube_SampleQuality.npy'
 
     # ========== Objects to table indices =====================================
@@ -153,7 +153,7 @@ class Policy():
         None.
         
         """
-        np.save(self.file_name, np.array(dict(self.Q)))
+        np.save(self.file_name, np.array(dict(self.Q)), allow_pickle= True)
 
     # -------------------------------------------------------------------------
 
