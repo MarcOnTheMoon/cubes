@@ -9,7 +9,7 @@ by the command 'pip install pygame'.
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.09
+@version: 2023.08.20
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 import os
@@ -43,15 +43,15 @@ class Render2D:
         assert isinstance(fps, float) and (fps > 0.0)
         
         # Set parent environment and render speed
-        self._env = env
-        self._fps = fps
+        self.__env = env
+        self.__fps = fps
         
         # Cube and window dimensions
-        self._facelet_size = 60
-        self._width = 9 * self._facelet_size
-        self._height = 7 * self._facelet_size
-        self._x_center = self._width / 2
-        self._y_center = self._height / 2
+        self.__facelet_size = 60
+        self.__width = 9 * self.__facelet_size
+        self.__height = 7 * self.__facelet_size
+        self.__x_center = self.__width / 2
+        self.__y_center = self.__height / 2
 
         # Init pygame
         pygame.init()
@@ -60,8 +60,8 @@ class Render2D:
         # Set window properties and get canvas
         pygame.display.set_caption('Pocket cube gym')
         self.font = pygame.font.SysFont('Consolas', 24)
-        self.screen = pygame.display.set_mode((self._width, self._height), pygame.HIDDEN)
-        self.canvas = pygame.Surface((self._width, self._height))
+        self.screen = pygame.display.set_mode((self.__width, self.__height), pygame.HIDDEN)
+        self.canvas = pygame.Surface((self.__width, self.__height))
         self._set_always_on_top()
 
     # -------------------------------------------------------------------------
@@ -105,9 +105,9 @@ class Render2D:
         
         """
         if is_show is True:
-            self.screen = pygame.display.set_mode((self._width, self._height))
+            self.screen = pygame.display.set_mode((self.__width, self.__height))
         else:
-            self.screen = pygame.display.set_mode((self._width, self._height), pygame.HIDDEN)
+            self.screen = pygame.display.set_mode((self.__width, self.__height), pygame.HIDDEN)
 
     # -------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ class Render2D:
     # ========== Colors =======================================================
 
     # Define colors for rendering
-    _colors = {
+    __colors = {
        'red' : (255, 0, 0),
        'green' : (0, 255, 0),
        'blue' : (0, 0, 255),
@@ -158,12 +158,12 @@ class Render2D:
             
         """
         match color_char:
-            case 'W': color = Render2D._colors['white']
-            case 'Y': color = Render2D._colors['yellow']
-            case 'O': color = Render2D._colors['orange']
-            case 'R': color = Render2D._colors['red']
-            case 'G': color = Render2D._colors['green']
-            case 'B': color = Render2D._colors['blue']
+            case 'W': color = Render2D.__colors['white']
+            case 'Y': color = Render2D.__colors['yellow']
+            case 'O': color = Render2D.__colors['orange']
+            case 'R': color = Render2D.__colors['red']
+            case 'G': color = Render2D.__colors['green']
+            case 'B': color = Render2D.__colors['blue']
         return color
 
     # ========== Render cube ==================================================
@@ -190,7 +190,7 @@ class Render2D:
 
         # Show window and draw cube
         self.show_window(True)
-        self.canvas.fill(Render2D._colors['white'])
+        self.canvas.fill(Render2D.__colors['white'])
         self._draw_cube(state)
         self._draw_text()
         
@@ -199,20 +199,20 @@ class Render2D:
         
         # Update the displayed content and delay (=> fps)
         pygame.display.update()
-        sleep(1.0 / self._fps)
+        sleep(1.0 / self.__fps)
 
         # Display special image when the cube is solved
-        if (self._env.number_moves > 0) and state.is_cube_solved():
+        if (self.__env.number_actions > 0) and state.is_cube_solved():
             # Clear screen
-            self.screen.fill(Render2D._colors['white'])
+            self.screen.fill(Render2D.__colors['white'])
 
             # Show image
             file_dir = os.path.dirname(os.path.abspath(__file__))
             assets_dir = os.path.join(file_dir, 'assets')
             img = pygame.image.load(assets_dir + '\CubySolved.png')
-            factor = (self._height - 50) / img.get_rect().height    # Top and bottom margin of 25 pixel
+            factor = (self.__height - 50) / img.get_rect().height    # Top and bottom margin of 25 pixel
             img = pygame.transform.scale(img, (factor * img.get_rect().width, factor * img.get_rect().height))
-            self.screen.blit(img, (self._x_center - img.get_rect().width/2, 25))
+            self.screen.blit(img, (self.__x_center - img.get_rect().width/2, 25))
 
             # Process event queue
             pygame.event.pump()
@@ -240,14 +240,17 @@ class Render2D:
         None.
         
         """
-        text_color = Render2D._colors['black']
-        image_last_move = self.font.render(f'Last move : {self._env.last_move}', True, text_color)
-        image_moves = self.font.render(f'Moves     : {self._env.number_moves}', True, text_color)
-        image_scrambles = self.font.render(f'Scrambles : {self._env.number_scrambles}', True, text_color)
+        text_color = Render2D.__colors['black']
+        if self.__env.last_action is not None:
+            image_last_action = self.font.render(f'Last move : {self.__env.last_action.name}', True, text_color)
+        else:
+            image_last_action = self.font.render('Last move :', True, text_color)
+        image_actions = self.font.render(f'Moves     : {self.__env.number_actions}', True, text_color)
+        image_scrambles = self.font.render(f'Scrambles : {self.__env.number_scrambles}', True, text_color)
         
-        self.screen.blit(image_last_move, (self._x_center + self._facelet_size , 40))
-        self.screen.blit(image_moves, (self._x_center + self._facelet_size , 65))
-        self.screen.blit(image_scrambles, (self._x_center + self._facelet_size , 90))
+        self.screen.blit(image_last_action, (self.__x_center + self.__facelet_size , 40))
+        self.screen.blit(image_actions, (self.__x_center + self.__facelet_size , 65))
+        self.screen.blit(image_scrambles, (self.__x_center + self.__facelet_size , 90))
     
     # -------------------------------------------------------------------------
 
@@ -272,22 +275,22 @@ class Render2D:
         plane_representation = [plane_representation[i] for i in order]
 
         # Draw faces on Top (U, 'up') and bottom (D, 'down')
-        frame_color = Render2D._colors['black']
+        frame_color = Render2D.__colors['black']
         for row in range(2):
             for col in range(2):
                 # Up
                 color = Render2D._char2color(plane_representation[0][2 * row + col])
-                x0 = self._x_center - ((2 - col) * self._facelet_size)
-                y0 = self._y_center - ((3 - row) * self._facelet_size)
-                rectangle = pygame.Rect(x0, y0, self._facelet_size + 1, self._facelet_size + 1)
+                x0 = self.__x_center - ((2 - col) * self.__facelet_size)
+                y0 = self.__y_center - ((3 - row) * self.__facelet_size)
+                rectangle = pygame.Rect(x0, y0, self.__facelet_size + 1, self.__facelet_size + 1)
                 pygame.draw.rect(self.canvas, color, rectangle)             # Filled square
                 pygame.draw.rect(self.canvas, frame_color, rectangle, 1)    # Black frame
                 
                 # Down
                 color = Render2D._char2color(plane_representation[5][2 * row + col])
-                x0 = self._x_center - ((2 - col) * self._facelet_size)
-                y0 = self._y_center + ((1 + row) * self._facelet_size)
-                rectangle = pygame.Rect(x0, y0, self._facelet_size + 1, self._facelet_size + 1)
+                x0 = self.__x_center - ((2 - col) * self.__facelet_size)
+                y0 = self.__y_center + ((1 + row) * self.__facelet_size)
+                rectangle = pygame.Rect(x0, y0, self.__facelet_size + 1, self.__facelet_size + 1)
                 pygame.draw.rect(self.canvas, color, rectangle)
                 pygame.draw.rect(self.canvas, frame_color, rectangle, 1)
         
@@ -296,9 +299,9 @@ class Render2D:
             for row in range(2):
                 for col in range(2):
                     color = Render2D._char2color(plane_representation[face_idx + 1][2 * row + col])
-                    x0 = self._x_center - ((4 - col) * self._facelet_size) + (2 * face_idx * self._facelet_size)
-                    y0 = self._y_center - ((1 - row) * self._facelet_size)
-                    rectangle = pygame.Rect(x0, y0, self._facelet_size + 1, self._facelet_size + 1)
+                    x0 = self.__x_center - ((4 - col) * self.__facelet_size) + (2 * face_idx * self.__facelet_size)
+                    y0 = self.__y_center - ((1 - row) * self.__facelet_size)
+                    rectangle = pygame.Rect(x0, y0, self.__facelet_size + 1, self.__facelet_size + 1)
                     pygame.draw.rect(self.canvas, color, rectangle)
                     pygame.draw.rect(self.canvas, frame_color, rectangle, 1)
                     

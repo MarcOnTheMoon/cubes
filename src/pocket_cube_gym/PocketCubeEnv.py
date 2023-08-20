@@ -7,7 +7,7 @@ https://www.gymlibrary.dev/content/environment_creation/
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.09
+@version: 2023.08.20
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -101,8 +101,8 @@ class PocketCubeEnv(gym.Env):
             self.step(action)
     
         # Do not count moves
-        self.last_move = ''
-        self.number_moves = 0
+        self.last_action = None
+        self.number_actions = 0
     
     # -------------------------------------------------------------------------
 
@@ -124,8 +124,8 @@ class PocketCubeEnv(gym.Env):
             Empty, but required by Gym API
             
         """
-        self.last_move = ''
-        self.number_moves = 0
+        self.last_action = None
+        self.number_actions = 0
         self.number_scrambles = 0
 
         self.observation_space = State()
@@ -168,8 +168,8 @@ class PocketCubeEnv(gym.Env):
         reward = 50 if done else -1
 
         # Store last and overall number of actions (i.e., rotations)
-        self.last_move = action.name
-        self.number_moves += 1
+        self.last_action = action
+        self.number_actions += 1
             
         return next_state, reward, done, {}
 
@@ -251,8 +251,8 @@ class PocketCubeEnv(gym.Env):
         self.number_scrambles = number_moves
         
         # Don't count moves
-        self.number_moves = 0
-        self.last_move = ''
+        self.number_actions = 0
+        self.last_action = None
             
         return self.observation_space
 
@@ -285,7 +285,7 @@ class PocketCubeEnv(gym.Env):
 
         # Remember initial state and move count of environment object
         env_state = self.observation_space
-        env_number_moves = self.number_moves
+        env_number_moves = self.number_actions
 
         # Apply all defined rotations
         explored_state = self.observation_space if (state is None) else state
@@ -307,7 +307,7 @@ class PocketCubeEnv(gym.Env):
 
         # Restore initial state and move count in environment object
         self.observation_space = env_state
-        self.number_moves = env_number_moves
+        self.number_actions = env_number_moves
 
         return new_states, is_solved_states
  

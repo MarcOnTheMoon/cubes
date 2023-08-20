@@ -4,7 +4,7 @@ States of Pocket cubes for OpenAI gym.
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.09
+@version: 2023.08.20
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -50,7 +50,7 @@ class State:
     # ========== Getter =======================================================
 
     # Solved states (key: orientation, value: valid positions for the orientation)
-    _solved_states = {
+    __solved_states = {
         (0, 0, 0, 0, 0, 0, 0, 0): (
             (0, 1, 2, 3, 4, 5, 6, 7),       # White 0
             (1, 2, 3, 0, 5, 6, 7, 4),       # White 270
@@ -79,6 +79,7 @@ class State:
             (6, 2, 1, 5, 7, 3, 0, 4),       # Blue 180
             (7, 3, 2, 6, 4, 0, 1, 5))       # Orange 90
         }
+    __solved_state_keys = __solved_states.keys()
 
     def is_cube_solved(self):
         """
@@ -90,19 +91,12 @@ class State:
             True if state represents solved cube, else False.
             
         """
-        # planes = self.get_plane_representation()
-        
-        # for plane in planes:
-        #     if (plane[0] != plane[1]) or (plane[0] != plane[2]) or (plane[0] != plane[3]):
-        #         return False
-        # return True
-
-        is_orientation = self.orientations in self._solved_states
-        return is_orientation and (self.positions in self._solved_states[self.orientations])
+        is_orientation = self.orientations in State.__solved_state_keys
+        return is_orientation and (self.positions in State.__solved_states[self.orientations])
     
     # ========== Apply action =================================================
 
-    _next_state_index_map = {
+    __next_state_index_map = {
         Action.R: ((1, 2), (2, 6), (6, 5), (5, 1)),
         Action.r: ((2, 1), (6, 2), (5, 6), (1, 5)),
         Action.L: ((3, 0), (7, 3), (0, 4), (4, 7)),
@@ -135,7 +129,7 @@ class State:
         assert isinstance(action, Action)
         
         # Move corners to their new positions within in tupels positions and orientations
-        index_map = State._next_state_index_map[action]
+        index_map = State.__next_state_index_map[action]
         new_positions, new_orientations = self._permuted_corners(index_map)
         
         # Adapt corner orientations (angles)
@@ -210,7 +204,7 @@ class State:
         
     # Map 3-sided cubelets to their projection on the cube's faces.
     # Faces are indexed in the order the presentation returned by get_plane_representation().
-    _corner_maps = (
+    __corner_maps = (
         # Top layer
         ((0, 2), (3, 0), (1, 1)),
         ((0, 3), (4, 0), (3, 1)),
@@ -224,7 +218,7 @@ class State:
     )
 
     # Cubie colors of solved state
-    _corner_colors = (
+    __corner_colors = (
         ('W', 'R', 'G'),    # Cubie 0
         ('W', 'B', 'R'),    # Cubie 1
         ('W', 'O', 'B'),    # Cubie 2
@@ -284,8 +278,8 @@ class State:
             [None, None, None, None],       # Right
             [None, None, None, None]]       # Down
     
-        for corner, orientation, mapping in zip(self.positions, self.orientations, State._corner_maps):
-            colors = State._corner_colors[corner]
+        for corner, orientation, mapping in zip(self.positions, self.orientations, State.__corner_maps):
+            colors = State.__corner_colors[corner]
             colors = State._map_colors_orientation(colors, orientation)
             
             for (face_index, location_index), color in zip(mapping, colors):
