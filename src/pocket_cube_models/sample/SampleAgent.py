@@ -8,7 +8,7 @@ are visualized by trying to solve randomly scrambled cubes.
 @authors: Marc Hensel
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.09
+@version: 2023.08.21
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -32,9 +32,16 @@ class SampleAgent():
     
     # ========== Constructor ==================================================
 
-    def __init__(self, render_fps=1.0):
+    def __init__(self, render_mode='2D', render_fps=1.0):
         """
         Constructor.
+
+        Parameters
+        ----------
+        render_mode : string, optional
+            '2D', '3D', or None. (Default: '2D')
+        render_fps : float, optional
+            Speed of the rendering in frames per seconds. (Default: metadata['render_fps'])
 
         Returns
         -------
@@ -43,7 +50,7 @@ class SampleAgent():
         """
         # Init gym environment
         assert isinstance(render_fps, float)
-        self.env = PocketCubeEnv(render_fps=render_fps)
+        self.env = PocketCubeEnv(render_mode = render_mode, render_fps = render_fps)
         
         # Init policy
         self.policy = Policy(self.env.action_space.n)
@@ -176,7 +183,7 @@ class SampleAgent():
 
 if __name__ == '__main__':
     max_scrambles = 4
-    agent = SampleAgent()
+    agent = SampleAgent(render_mode = '3D')
 
     # Load policy from file (to further improve it)
     if agent.policy.load_from_file():
@@ -185,10 +192,10 @@ if __name__ == '__main__':
         print('No policy file found.')
     
     # Improve policy for more scrambles and save it to file
-    for number_scrambles in range(1, max_scrambles + 1):
-        agent.train_policy(number_scrambles, number_episodes = number_scrambles * 10_000)
-    print('Saving policy to file ...')
-    agent.policy.save_to_file()
+    # for number_scrambles in range(1, max_scrambles + 1):
+    #     agent.train_policy(number_scrambles, number_episodes = number_scrambles * 10_000)
+    # print('Saving policy to file ...')
+    # agent.policy.save_to_file()
     
     # Demonstrate policy with randomly scrambled cubes
     for number_scrambles in range(1, max_scrambles + 1):
