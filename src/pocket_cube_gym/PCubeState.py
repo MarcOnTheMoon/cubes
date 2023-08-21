@@ -4,7 +4,7 @@ States of Pocket cubes for OpenAI gym.
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.20
+@version: 2023.08.21
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -235,23 +235,16 @@ class State:
         
         The plane representation is defined as follows:
             
-                      +---------+
-                      | U U U U |
-                      | U U U U |
-                      | U U U U |
-                      | U U U U |
-            +---------+---------+---------+---------+
-            | L L L L | F F F F | R R R R | B B B B |
-            | L L L L | F F F F | R R R R | B B B B |
-            | L L L L | F F F F | R R R R | B B B B |
-            | L L L L | F F F F | R R R R | B B B B |
-            | L L L L | F F F F | R R R R | B B B B |
-            +---------+---------+---------+---------+
-                      | D D D D |
-                      | D D D D |
-                      | D D D D |
-                      | D D D D |
-                      +---------+
+                  +-----+
+                  | U U |
+                  | U U |
+            +-----+-----+-----+-----+
+            | L L | F F | R R | B B |
+            | L L | F F | R R | B B |
+            +-----+-----+-----+-----+
+                  | D D |
+                  | D D |
+                  +-----+
         
         Data structure stores the cube's faces in following order:
             
@@ -353,3 +346,38 @@ class State:
             dst[corner_index, permutated_index * 3 + ortientation] = 1
     
         return dst
+
+    # -------------------------------------------------------------------------
+
+    # TODO Added: Check and refactor
+    def one_hot_encode_states(states):
+        """
+        Encode multiple cube states as 8x24 one-hot tensors.
+        
+        Refer to one_hot_encoding() for further information on the encoding.
+        
+        Parameters
+        ----------
+        states: list(State)
+            List of cube states from type State
+           
+        Returns
+        -------
+        numpy.ndarray
+            Array of encoded states
+        """
+        encoded_shape = (8, 24)
+    
+        # states could be list of lists or just list of states
+        if isinstance(states[0], list):
+            encoded = np.zeros((len(states), len(states[0])) + encoded_shape, dtype=np.float32)
+    
+            for i, st_list in enumerate(states):
+                for j, state in enumerate(st_list):
+                    state.one_hot_encoding(dst = encoded[i, j])
+        else:
+            encoded = np.zeros((len(states), ) + encoded_shape, dtype=np.float32)
+            for i, state in enumerate(states):
+                state.one_hot_encoding(dst = encoded[i])
+    
+        return encoded

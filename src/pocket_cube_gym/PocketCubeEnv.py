@@ -7,7 +7,7 @@ https://www.gymlibrary.dev/content/environment_creation/
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.20
+@version: 2023.08.21
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -18,6 +18,7 @@ import random
 from PCubeAction import Action
 from PCubeState import State
 from PCubeRender2D import Render2D
+from PCubeRender3D import Render3D
 
 # -----------------------------------------------------------------------------
 # Environment
@@ -25,7 +26,7 @@ from PCubeRender2D import Render2D
 
 class PocketCubeEnv(gym.Env):
     # Define render modes ('None' included by default) and speed
-    metadata = {'render_modes': ['2D'], 'render_fps': 1.0}
+    metadata = {'render_modes': ['2D', '3D'], 'render_fps': 1.0}
 
     # ========== Constructor ==================================================
 
@@ -61,6 +62,8 @@ class PocketCubeEnv(gym.Env):
 
         if render_mode == '2D':
             self.render_window = Render2D(self, render_fps)
+        elif render_mode == '3D':
+            self.render_window = Render3D(self, render_fps)
         
         # Set initial state
         self.observation_space, _ = self.reset()
@@ -196,7 +199,7 @@ class PocketCubeEnv(gym.Env):
             state = self.observation_space
         
         # Render        
-        if self.render_mode == '2D':
+        if self.render_mode in ['2D', '3D']:
             self.render_window.render(state)
 
     # ========== Close resources ==============================================
@@ -214,7 +217,7 @@ class PocketCubeEnv(gym.Env):
         None.
         
         """
-        if self.render_window is not None:
+        if (self.render_mode == '2D') and (self.render_window is not None):
             self.render_window.close()
 
     # ========== Scramble cube (i.e., apply random rotations) =================
@@ -316,15 +319,17 @@ class PocketCubeEnv(gym.Env):
 # -----------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # Create environment and render initial state
-    env = PocketCubeEnv(render_fps = 1.5)
-    env.render()    
-
-    # Aplly sample actions and render
-    for action in [Action.F, Action.L, Action.u, Action.U, Action.l, Action.f]:
-        env.step(action)
-        env.render()
+    # Run sample action rendering in 2D and 3D
+    for render_mode in ['2D', '3D']:
+        # Create environment and render initial state
+        env = PocketCubeEnv(render_mode = render_mode, render_fps = 1.5)
+        env.render()    
     
-    # Free resources
-    env.close()
+        # Aplly sample actions and render
+        for action in [Action.F, Action.L, Action.u, Action.U, Action.l, Action.f]:
+            env.step(action)
+            env.render()
+        
+        # Free resources
+        env.close()
  

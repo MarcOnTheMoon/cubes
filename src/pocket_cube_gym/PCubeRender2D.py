@@ -9,7 +9,7 @@ by the command 'pip install pygame'.
 @authors: Finn Lanz (initial), Marc Hensel (refactoring, maintenance)
 @contact: http://www.haw-hamburg.de/marc-hensel
 @copyright: 2023
-@version: 2023.08.20
+@version: 2023.08.21
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 import os
@@ -274,7 +274,7 @@ class Render2D:
         order = [0, 1, 3, 4 ,2, 5]
         plane_representation = [plane_representation[i] for i in order]
 
-        # Draw faces on Top (U, 'up') and bottom (D, 'down')
+        # Draw faces on top (U, 'up') and bottom (D, 'down')
         frame_color = Render2D.__colors['black']
         for row in range(2):
             for col in range(2):
