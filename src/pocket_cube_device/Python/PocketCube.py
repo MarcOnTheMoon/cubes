@@ -4,8 +4,8 @@ Control mechanical movements of 2x2x2 Pocket Cube by Arduino board using USB.
 @author: Marc Hensel
 @contact: http://www.haw-hamburg.de/marc-hensel
 
-@copyright: 2023, Marc Hensel
-@version: 2023.07.29
+@copyright: 2024, Marc Hensel
+@version: 2024.03.09
 @license: CC BY-NC-SA 4.0, see https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 """
 
@@ -35,7 +35,7 @@ class PocketCube():
         'F': 'B',
         'B': 'F',
         'L': 'R',
-        'R': 'L',
+        'R': 'L'
     }
 
     # Change of orientation in 'SpiCor' mode
@@ -189,7 +189,7 @@ class PocketCube():
 
         """
         time.sleep(waitTimeSec)
-        cube._arduino.writeString('I')
+        self._arduino.writeString('I')
         time.sleep(1.0)             # Wait for Arduino to read buffer
         self._arduino.close()
 
