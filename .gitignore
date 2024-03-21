@@ -1,0 +1,12 @@
+# Define "ignore directories"
+*.ignore
+
+# Ignore FreeCAD source files (3D printing)
+*.FCStd
+*.FCStd1
+
+# Ignore UMLet source files (UML diagrams)
+*.uxf
+
+# Ignore temporary Python files
+__pycache__
