@@ -53,6 +53,4 @@ My deepest thanks go to following  magnificent students of our  [Department at H
 - Kim Kristin Westphal (Rubik's cube device)
 
 ## Contact
-Marc Hensel, University of Applied Sciences Hamburg (HAW Hamburg)
-
-http://www.haw-hamburg.de/marc-hensel
+[Marc Hensel](http://www.haw-hamburg.de/marc-hensel), University of Applied Sciences Hamburg (HAW Hamburg)
