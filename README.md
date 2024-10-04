@@ -1,8 +1,13 @@
 # Pocket Cube and Rubik's Cube Solvers
-Dealing with artificial intelligence (AI), we were curious how to let computers learn
-to solve a scrambled Pocket cube (2x2x2) or Rubik's cube (3x3x3). Okay, this is challenging enough.
-Still, wouldn't it be even more fun to demonstrate the results by machines that _mechanically_ solve physical cubes?
-Join us on this fascinating endeavor. 
+
+> [!WARNING]
+> I didn't finalize or update the material and this repository is temporarily __on hold__ - my apologies.
+
+> [!NOTE]
+> We are working on several related self-learning sytems and have decided to focus on others, first.<br>
+> However, we intent to re-visit cubes and improve the project from insights gained in other activities.
+
+Dealing with artificial intelligence (AI), we were curious how to let computers learn to solve a scrambled Pocket cube (2x2x2) or Rubik's cube (3x3x3). Okay, this is challenging enough. Still, wouldn't it be even more fun to demonstrate the results by machines that _mechanically_ solve physical cubes? Join us on this fascinating endeavor. 
 
 ## Overview
 This is what we did so far:
